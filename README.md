@@ -1,18 +1,22 @@
-# CS50 Web Capstone
+# Teach.me
+## A Medium like social network
+Course Capstone - [CS50’s Web Programming with Python and JavaScript](https://cs50.harvard.edu/web/2020/)
 
-## Teach.me
+Implemented using the Django framework, CSS Bootstrap Framework, and JavaScript.
 
-Teach.me is a social network web application with the aim of sharing and learning new things by writing (like a "Medium"). You can follow / unfollow users and write, edit, like and comment posts.
+![demo img](demo.png)
 
-The project is sufficiently distinct from the other projects because:
-1. There is a more friendly UI and UX 
-2. there are some other features like popular posts, featured posts
-3. Was used CKEditor software to improve posts composing 
-4. Was used an Bootstrap design template in the front-end 
+For a full demo, see [this video](https://www.youtube.com/watch?v=-toxzABgUFs&list=PL63wdUW0APKvFys2It2Ubgs6DslKpblW8).
 
-### Files
-- app: main application (views.py, admin.py, models.py...)
-- home: project folder (settings.py)
-- media_root: media/images directory
-- static_files: BS files
-- templates: html files
+### Specification
+
+- Interface: More friendly UI and UX.
+
+- Common features: compose posts, feed, saved posts.
+
+- New Features: popular posts, featured posts, categories.
+
+- Text Editor: CKEditor library to improve post composing.
+
+- Frontend: Bootstrap design template in the front-end. 
+
