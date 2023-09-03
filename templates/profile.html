@@ -1,0 +1,296 @@
+{% extends 'layout.html' %}
+
+
+{% block navbar %}
+    {% include "navbar.html" %}
+{% endblock navbar %}
+
+
+{% block body %}
+
+ <!-- Main layout -->
+  <main>
+    <div class="container-fluid">
+
+      <div class="row mt-3">
+
+        <div class="col-xl-8 col-lg-12 mb-4">
+
+          <div class="view rounded">
+            <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(9).jpg"  class="img-fluid rounded-bottom" alt="sample image" style="opacity:0"> 
+            <div class="mask rgba-stylish-strong">
+              <div class="text-dark py-lg-5 py-0 my-0">
+                <div class="d-flex align-items-center" >
+                  <img src={{username.avatar}} class="rounded-circle ml-4" height="210px">
+                  <h2 class="card-title font-weight-bold pt-2 mr-auto ml-3 text-light">
+                    <strong>{{username}}</strong>
+                  </h2>
+                </div>
+                <p class="mt-3 ml-5 text-light">{{username.bio}}</p>
+                <p class="mt-3 ml-5 text-light">{{like_subjects}}</p>
+              </div>
+            </div>
+
+          </div>
+          <!--Image -->
+
+        </div>
+
+        <div class="col-xl-4 col-lg-12 clearfix d-none d-lg-block">
+          <div class="row">
+
+            {% comment %} <div class="col-xl-12 col-lg-6 mb-4">
+
+              <!--Image -->
+              <div class="view  rounded">
+
+                <img src="https://mdbootstrap.com/img/Photos/Others/images/9.jpg" class="img-fluid rounded-bottom" style="opacity:0" alt="sample image">
+                <div class="mask rgba-black-strong">
+                  <div class="text-white text-center d-flex align-items-center">
+                      {% if username != user %}
+                        <h4 class="card-title font-weight-bold pt-2">
+                          <strong>Followers: {{followers_count}}</strong>
+                        </h4>
+                      {% else %}
+                        <h4 class="card-title font-weight-bold pt-2">
+                          <strong>Following: {{following_count}}</strong>
+                        </h4>
+                      {% endif %}
+
+                      {% if username != user %}
+                        <a class="btn btn-pink btn-sm">
+                          <i class="fas fa-clone left"></i>{{follow_unfollow}}
+                        </a>
+                      {% endif %}
+
+
+
+                  </div>
+                </div>
+
+              </div>
+              <!--Image -->
+
+            </div> {% endcomment %}
+
+            <div class="col-xl-12 col-lg-6">
+
+              <!--Image -->
+              <div class="view  rounded">
+
+                <img src="https://mdbootstrap.com/img/Photos/Others/images/9.jpg" class="img-fluid rounded-bottom" style="opacity:0" alt="sample image">
+                <div class="mask rgba-indigo-strong">
+                  <div class="text-white text-center">
+                      {% if username != user %}
+                        <a href="{% url 'follow' username.id %}">
+                          <span class="badge badge-warning mt-4">{{follow_unfollow}}</span>
+                        </a> 
+                      {% endif %}
+                      <h4 class="card-title font-weight-bold pt-2">
+                        <strong>Info</strong>
+                      </h4>
+
+                      <p class="font-small mx-3">Followers: {{followers_count}}</p>
+                      <p class="font-small mx-3">Following: {{following_count}}</p>
+                      <p class="font-small mx-3">Posts: {{posts_count}}</p>
+
+                  </div>
+                </div>
+              </div>
+              <!--Image -->
+
+            </div>
+
+          </div>
+        </div>
+  
+      </div>
+
+
+      <!-- Magazine -->
+      <div class="row mt-5">
+
+        <div class="col-xl-8 col-lg-8 col-md-12">
+          <section>
+
+            <h5 class="dark-grey-text font-weight-bold">
+              <strong>{{username}}'s POSTS</strong>
+            </h5>
+            <hr>
+
+            <!-- Grid row -->
+            <div class="row">
+
+              {% for post in posts %}
+                  <div class="col-md-12 mb-4">
+                      <div class="card  mb-3 text-center hoverable">
+                      <div class="card-body">
+
+                          <!--Grid row-->
+                          <div class="row">
+
+                          <!--Grid column-->
+                          <div class="col-md-5 mx-3 my-3">
+                              <!--Featured image-->
+                              <div class="view overlay rgba-white-slight">
+                              <img src="{{post.image.url}}" class="img-fluid rounded-bottom"
+                                  alt="Sample image for first version of blog listing">
+                              <a>
+                                  <div class="mask"></div>
+                              </a>
+                              </div>
+                          </div>
+                          <!--Grid column-->
+
+                          <!--Grid column-->
+                          <div class="col-md-6 text-left ml-xl-3 ml-lg-0 ml-md-3 mt-3">
+                              <h4 class="mb-4">
+                              <strong>{{post.title}}</strong>
+                              </h4>
+                              <p class="dark-grey-text">{{post.description}}</p>
+                              <p>by
+                              <a>
+                                  <strong>{{username}}</strong>
+                              </a>, {{post.timestamp}}</p>
+                              <a href="{% url 'post_view' post.id %}" class="btn btn-indigo btn-sm">Read more</a>
+                          </div>
+                          <!--Grid column-->
+
+                          </div>
+                          <!--Grid row-->
+
+                      </div>
+                      </div>
+                      <!--News card-->
+
+                  </div>                
+              {% endfor %}
+
+            </div>
+
+          </section>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-xl-4 col-lg-4 col-md-12 mt-0">
+
+          <!-- Popular posts -->
+          <section>
+            <div class="row">
+              <div class="col-md-10 col-lg-12 mx-auto">
+                <div id="carousel-example-2" class="carousel slide carousel-fade carousel-img" data-ride="carousel">
+                  <!--Indicators-->
+                  <ol class="carousel-indicators">
+                    <li data-target="#carousel-example-2" data-slide-to="0" class="active"></li>
+                    <li data-target="#carousel-example-2" data-slide-to="1"></li>
+                    <li data-target="#carousel-example-2" data-slide-to="2"></li>
+                  </ol>
+
+                  <!--Slides-->
+                  <div class="carousel-inner" role="listbox">
+                  
+                    {% for post in popular_posts %}
+                      <div class="carousel-item active">
+                        <div class="view">
+                          <img class="d-block w-100 rounded" src="{{post.image.url}}"
+                            alt="First slide">
+                          <div class="mask rgba-black-light"></div>
+                        </div>
+                        <div class="carousel-caption">
+                          <a href="{% url 'post_view' post.id %}">
+                            <h3 class="h3-responsive font-weight-bold">{{post.title}}</h3>
+                          </a>
+                          <p>{{post.poster}}</p>
+                        </div>
+                      </div>
+                    {% endfor %}
+
+                  </div>
+
+
+                  <!--Controls-->
+                  <a class="carousel-control-prev" href="#carousel-example-2" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                  <a class="carousel-control-next" href="#carousel-example-2" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </div>
+              </div>
+
+              
+            
+
+            </div>
+            <!-- Grid row -->
+
+          </section>
+
+          <!-- Section: Categories -->
+          <section class="section mt-5">
+
+            <h5 class="dark-grey-text font-weight-bold">
+              <strong>SUBJECTS</strong>
+            </h5>
+            <hr>
+
+            <ul class="list-group z-depth-1">
+              {% for s in subjects %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <a href="{% url 'subject' s %}" >{{s}}</a>
+                </li>
+              {% endfor %}
+            </ul>
+
+          </section>
+
+
+          <!-- Section: Featured posts -->
+          <section class="section widget-content mt-5">
+
+            <h5 class="dark-grey-text font-weight-bold">
+              <strong>FEATURED POSTS</strong>
+            </h5>
+
+            <hr>
+
+            <div class="card card-body pb-0">
+              {% for post in featured_posts  %}
+            
+                <div class="single-post">
+                  <div class="row">
+                    <div class="col-4">
+                      <div class="view overlay">
+                        <img src="{{post.image.url}}" height="6" class="img-fluid rounded-0"
+                          alt="sample image">
+                        <a href="{% url 'post_view' post.id %}">
+                          <div class="mask waves-light"></div>
+                        </a>
+                      </div>
+                    </div>
+
+                    <div class="col-8">
+                      <h6 class="mt-0 mb-3"><strong>{{post.title}}</strong></h6>
+
+                      <div class="post-data">
+                        <p class="font-small grey-text mb-0"><i class="far fa-clock-o"></i> {{post.timestamp}}</p>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+              {% endfor %}
+            </div>
+
+          </section>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+
+{% endblock %}

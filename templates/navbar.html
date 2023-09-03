@@ -1,0 +1,84 @@
+ <!-- Navigation -->
+ <header>
+
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg navbar-dark stylish-color-dark">
+
+      <!-- Navbar brand -->
+      <a class="navbar-brand" href="{% url 'index' %}">Teach.me</a>
+
+
+
+      <!-- Collapse button -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+
+      <!-- Collapsible content -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+     <!-- Links -->
+        <ul class="navbar-nav mr-auto">
+          {% if user.is_authenticated %}              
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'compose' %}">Compose</a>
+
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'feed' %}">Feed</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'saved' %}">Saved Posts</a>
+            </li>                                
+          {% endif %}            
+
+        </ul>
+
+        <form class="form-inline" action="{% url 'index' %}" method="POST">
+          {% csrf_token %}
+          <div class="md-form my-0">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" name="q">
+          </div>
+        </form>
+        
+        <ul class="nav navbar-nav navbar-right">
+
+            {% if user.is_authenticated %}
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">{{ user.username }}</a>
+                <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="{% url 'profile' user.username %}">Profile</a>
+                    <hr>
+                    <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                </div>
+            </li>
+
+            {% else %}
+
+        
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Log in</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'register' %}">Register</a>
+            </li>
+
+            {% endif %}
+
+        </ul>
+        
+
+
+
+
+
+        <!-- Search form -->
+
+
+      </div>
+    </nav>
+  </header>
+

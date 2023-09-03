@@ -1,0 +1,61 @@
+{% extends "landing_layout.html" %}
+
+{% block landing_text %}
+
+    <h1 class="display-4 font-weight-bold">Teach.me</h1>
+    <hr class="hr-light">
+        <p>
+        <strong>Share your ideias</strong>
+        </p>
+
+        <p class="mb-4 d-none d-md-block">
+        <strong>Etiam tellus ante, sodales vel lacus ac, pretium consectetur nisi. Aenean blandit dui purus, eu volutpat est tempus non.</strong>
+        </p>
+
+        <a href="/" class="btn btn-indigo btn-lg">Enter without login
+        <i class="fas fa-mouse-pointer ml-2"></i>
+        </a>    
+        
+{% endblock landing_text %}
+
+{% block login_register_img %}
+  <div class="view full-page-intro" style="background-image: url('https://mdbootstrap.com/img/Photos/Others/images/79.jpg'); background-repeat: no-repeat; background-size: cover;">
+{% endblock %}
+
+
+{% block landing_form %}
+  <!-- Form -->
+  <form action="{% url 'login' %}" method="post">
+      {% csrf_token %}
+
+      <h3 class="dark-grey-text text-center">
+          <strong>Login</strong>
+      </h3>
+
+      
+      {% if message %}
+        <div>{{ message }}</div>
+      {% endif %}
+
+      <hr>
+
+      <div class="md-form">
+          <i class="fas fa-user prefix grey-text"></i>
+          <!-- <input type="text" id="form3" class="form-control"> -->
+          <input autofocus class="form-control" type="text" name="username" placeholder="Username">
+      </div>
+      
+      <div class="md-form">
+          <i class="fas fa-lock prefix grey-text"></i>
+          <input class="form-control" type="password" name="password" placeholder="Password">
+      </div>
+
+      <div class="text-center">
+          <button class="btn btn-indigo" type="submit">Send</button>
+          <hr/>
+          Don't have an account? <a href="{% url 'register' %}">Register here.</a>
+      </div>
+      
+    </form>
+{% endblock %}
+

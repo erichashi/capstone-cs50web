@@ -1,0 +1,174 @@
+{% extends 'layout.html' %}
+
+{% block navbar %}
+    {% include "navbar_simple.html" %}
+{% endblock navbar %}
+
+
+{% block body %}
+
+    <style>
+        .cke_reset{
+            width: 100%;
+        }
+    </style>
+
+
+     <main class="mt-">
+        <div class="container-fluid mb-5">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card hoverable pb-5 mx-md-3">
+                        <div class="card-body">
+                            <div class="container">
+
+
+                                {% if edit %}
+                                <form action="{% url 'post_edit' post.id %}" method="POST">                            
+                                {% else %}
+                                <form action="{% url 'compose' %}" method="POST">                            
+                                {% endif %}
+
+                                    {% csrf_token %}
+
+
+                                    <div class="form-group">
+                                        <label for="title">Title</label>
+                                        <input autofocus class="form-control" type="text" name="title" id="title" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="img">Background image</label>
+                                        <input type="file" name="img" id="img"  accept="image/png, image/jpeg" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="select">Category</label>
+                                        <select class="form-control" name="select"
+                                        id="select" required>
+                                            {% for category in categories %}
+                                                <option value="{{category}}">{{ category }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label for="sub_subjects">Sub subjects</label>
+                                        <input autofocus class="form-control" type="text" name="sub_subject" id="sub_subject" required>
+                                    </div>
+
+                                    <div class="form-group mb-5">
+                                        <label for="description">Description</label>
+                                        <input class="form-control" name="description" id="description" required>
+                                        <small>Be brief!</small>
+                                    </div>
+
+                                    <hr>
+                                    <!--Grid row-->
+                                    <div class="row pt-5">
+                                        <div class="col-md-12 col-xl-12">
+                                            <div class="row mt-3">
+                                                <textarea id="editor" name="body"></textarea>
+
+                                                <script src="https://cdn.ckeditor.com/4.13.0/standard/ckeditor.js"></script>
+                                                <script>
+                                                    CKEDITOR.replace( 'editor' );
+                                                </script>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    
+                                    {% if edit %}
+                                        <script>
+                                            document.querySelector('#title').value = '{{post.title}}';
+                                            document.querySelector('#select').value = '{{post.subject}}';
+                                            document.querySelector('#sub_subject').value = '{{post.sub_subject}}';
+                                            document.querySelector('#title').value = '{{post.title}}';
+                                            document.querySelector('#description').value = '{{post.description}}';
+
+                  
+                                        </script>
+                                    {% endif %}
+
+                                    <div class="row mb-4">
+                                        <div class="col-md-12 text-right">                                        
+                                            {% if edit %}
+                                                <a href="{% url 'post_delete' post.id %}" type="button" class="btn btn-danger">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>                               
+                                            {% endif %}
+                                            <input type="submit" value="Submit" class="btn btn-primary"> 
+                                        </div>
+                                    </div>
+
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+{% endblock %}
+
+{% block footer %}
+{% endblock footer %}
+{% comment %} 
+
+{% block body %}
+
+<div class="create-container">
+
+    <h2>Compose</h2>
+
+    <div class="containerList">
+
+    <form action="{% url 'compose' %}" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input autofocus class="form-control" type="text" name="title">
+        </div>
+            
+        <div class="form-group">
+            <label for="select">Category</label>
+            <select class="form-group" name="select">
+                {% for category in categories %}
+                    <option value="{{category}}">{{ category }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        </div>
+        <div class="form-group">
+            <label for="sub_subjects">Sub subjects</label>
+            <input autofocus class="form-control" type="text" name="sub_subject">
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <input class="form-control" name="description">
+            <small>Try to be brief!</small>
+        </div>
+
+        <div id="editor">
+
+        </div>
+        <script src="https://cdn.ckeditor.com/4.13.0/standard/ckeditor.js"></script>
+        <script>
+            CKEDITOR.replace( 'editor' );
+        </script>
+
+        
+        <input type="submit" value="Submit" class="btn-primary"> 
+    </form>
+
+    </div>
+    </div>
+
+{% endblock %} {% endcomment %}

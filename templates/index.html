@@ -1,0 +1,488 @@
+{% extends "layout.html" %}
+
+{% block navbar %}
+      {% include "navbar.html" %}
+{% endblock navbar %}
+
+
+{% block body %}
+
+
+  <!-- Main layout -->
+  <main>
+    <div class="container-fluid pl-5">
+      <div class="row mt-5">
+
+        <div class="col-xl-8 col-md-12 pl-0">
+          <section class="section extra-margins listing-section">
+
+            {% if user.is_authenticated and user_posts %}            
+              <h4 class="font-weight-bold"><strong>{{title}}</strong></h4>
+              <hr class="mr-4 red">
+
+              <div class="row mr-3">
+
+                {% for post in user_posts %}
+                
+                <div class="col-md-6 my-3">
+                  <!--Card-->
+                  <div class="card">
+
+                    <!--Card image-->
+                    <div class="view overlay">
+                      <img src="{{post.image.url}}" class="card-img-top"
+                        alt="{{post.title}}">
+                      <a href="{% url 'post_view' post.id %}">
+                        <div class="mask rgba-white-slight"></div>
+                      </a>
+                    </div>
+                    <!--/.Card image-->
+
+                    <!--Card content-->
+                    <div class="card-body">
+                      <!--Title-->
+                      <h4 class="card-title"><strong>{{post.title}}</strong></h4>
+                      <hr>
+                      <!--Text-->
+                      <p class="card-text">{{post.description}}
+                      </p>
+                    </div>
+                    <!--/.Card content-->
+
+                    <!-- Card footer -->
+                    <div class="mdb-color lighten-3 text-center">
+                      <ul class="list-unstyled list-inline font-small mt-3">
+
+                        <a href="{% url 'profile' post.poster %}">
+                        <li class="list-inline-item pr-2 text-light">
+                          {{post.poster}}
+                        </li>
+                        </a>
+                        <li class="list-inline-item pr-2"><p class="white-text"><i class="far fa-heart pr-1"></i>{{post.likes}}</p></li>
+                      </ul>
+                    </div>
+                    <!-- Card footer -->
+
+                  </div>
+                  <!--/.Card-->
+
+                </div>
+
+                {% empty %}
+
+                no posts
+
+                {% endfor %}
+
+              </div>
+
+            {% else %}
+            {% endif %}
+
+            <h4 class="font-weight-bold mt-5"><strong>POST OF THE DAY</strong></h4>
+            <hr class="mr-4 red">
+
+            <!--Fourth row-->
+            <div class="row single-post mb-4 mt-4 mr-3">
+              <!--Card-->
+              <div class="card mt-4 mx-3">
+
+                <!--Card image-->
+                <div class="view overlay">
+                  <img src="{{top_post.image.url}}" height="538px" class="card-img-top" alt="sample image">
+                  <a href="{% url 'post_view' top_post.id %}">
+                    <div class="mask rgba-white-slight"></div>
+                  </a>
+                </div>
+                <!--/Card image-->
+
+                <!--Card content-->
+                <div class="card-body">
+                  <!--Title-->
+                  <h4 class="card-title"><strong>{{top_post.title}}</strong></h4>
+                  <hr>
+                  <!--Text-->
+                  <p class="card-text font-thin">{{top_post.description}}</p>
+
+                </div>
+                <!--/Card content-->
+
+                <!-- Card footer -->
+                <div class="mdb-color lighten-3 text-center">
+                  <ul class="list-unstyled list-inline font-small mt-3">
+                    <li class="list-inline-item pr-2 white-text"><i class="far fa-clock-o pr-1"></i>{{top_post.timestamp}}</li>
+                    <li class="list-inline-item pr-2"><p href="#" class="white-text"><i class="far fa-heart pr-1"></i>{{top_post.likes}}</p></li>
+                  </ul>
+                </div>
+                <!-- Card footer -->
+              </div>
+              <!--/Card-->
+            </div>
+
+            
+            {% for sub, posts in like_subs.items  %}
+              <h4 class="font-weight-bold mt-5"><strong>{{sub}}</strong></h4>
+              <hr class="mr-4 red">
+
+              <div class="row mb-4 mr-3">
+
+                {% for post in posts %}
+                
+                <div class="col-md-6 my-3">
+                  <!--Card-->
+                  <div class="card">
+
+                    <!--Card image-->
+                    <div class="view overlay">
+                      <img src="{{post.image.url}}" class="card-img-top"
+                        alt="{{post.title}}">
+                      <a href="{% url 'post_view' post.id %}">
+                        <div class="mask rgba-white-slight"></div>
+                      </a>
+                    </div>
+                    <!--/.Card image-->
+
+                    <!--Card content-->
+                    <div class="card-body">
+                      <!--Title-->
+                      <h4 class="card-title"><strong>{{post.title}}</strong></h4>
+                      <hr>
+                      <!--Text-->
+                      <p class="card-text">{{post.description}}
+                      </p>
+                    </div>
+                    <!--/.Card content-->
+
+                    <!-- Card footer -->
+                    <div class="mdb-color lighten-3 text-center">
+                      <ul class="list-unstyled list-inline font-small mt-3">
+                        <li class="list-inline-item pr-2 white-text"><i class="far fa-clock-o pr-1"></i>{{post.poster}}</li>
+                        <li class="list-inline-item pr-2"><p class="white-text"><i class="far fa-heart pr-1"></i>{{post.likes}}</p></li>
+                      </ul>
+                    </div>
+                    <!-- Card footer -->
+
+                  </div>
+                  <!--/.Card-->
+
+                </div>
+
+                {% empty %}
+
+                no posts
+
+                {% endfor %} 
+              </div>
+            {% endfor %}
+
+          </section>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-xl-4 col-md-12 widget-column mt-0">
+
+          <!-- Category -->
+          {% if search %}
+            <section class="section mb-5">
+              <h4 class="font-weight-bold"><strong>USERS</strong></h4>
+              <hr class="red">
+              <ul class="list-group z-depth-1 mt-4">
+                {% for u in users_search %}
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="{% url 'profile' u %}" >{{u}}</a>
+                  </li>
+                  {%empty%}
+                  No users
+                {% endfor %}
+              </ul>
+            </section>
+          {% endif %}
+
+          
+          {% if feed %}
+          <section class="section mb-5">
+
+            <h4 class="font-weight-bold"><strong>FOLLOWING</strong></h4>
+            <hr class="red">
+            <ul class="list-group z-depth-1 mt-4">
+              {% for u in followings %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <a href="{% url 'profile' u.user %}">{{u.user}}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          </section>
+        {% endif %}
+
+          <!-- Category -->
+          <section class="section mb-5">
+
+            <h4 class="font-weight-bold"><strong>SUBJECT</strong></h4>
+            <hr class="red">
+
+            <ul class="list-group z-depth-1 mt-4">
+              {% for s in subjects %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <a href="{% url 'subject' s %}" >{{s}}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          </section>
+
+          <!-- Popular posts -->
+          <h4 class="font-weight-bold"><strong>POPULAR POSTS</strong></h4>
+          <hr class="red mb-4">
+          <section>
+            <div class="row">
+              <div class="col-md-10 col-lg-6 col-xl-12 mx-auto">
+                <div id="carousel-example-2" class="carousel slide carousel-fade carousel-img" data-ride="carousel">
+                  <!--Indicators-->
+                  <ol class="carousel-indicators">
+                    <li data-target="#carousel-example-2" data-slide-to="0" class="active"></li>
+                    <li data-target="#carousel-example-2" data-slide-to="1"></li>
+                    <li data-target="#carousel-example-2" data-slide-to="2"></li>
+                  </ol>
+                  <!--/.Indicators-->
+{% comment %} 
+                  <div class="carousel-inner" role="listbox">
+
+                    {% for post in popular_posts %}
+
+                      {% cycle 'yes' '' ''  as slidestart silent %}
+                        {% if slidestart %} 
+                          <div class="carousel-item {% if forloop.first %} active {% endif %}"> 
+                        {% endif %}
+
+                            <div class="carousel-item" >
+                              <div class="view">
+                                <img class="d-block w-100 rounded" src="{{post.image.url}}"
+                                  alt="First slide">
+                                <div class="mask rgba-black-light"></div>
+                              </div>
+
+                              <div class="carousel-caption">
+                                <a href="{% url 'post_view' post.id %}">
+                                  <h3 class="h3-responsive font-weight-bold">{{post.title}}</h3>
+                                </a>
+                                <p>{{post.poster}}</p>
+                              </div>
+                            </div>
+
+
+
+                        {% if slidestart %} </div>{% endif %}
+                      
+
+                    {% endfor %}
+
+                  </div> {% endcomment %}
+
+                  <div class="carousel-inner" role="listbox">
+                    <div class="carousel-item active">
+                      <div class="view">
+                        <img class="d-block w-100 rounded" src="http://127.0.0.1:8000/media/img_43.jpg"
+                          alt="First slide">
+                        <div class="mask rgba-black-light"></div>
+                      </div>
+
+                      <div class="carousel-caption">
+                        <a href="{% url 'post_view' 10 %}">
+                          <h3 class="h3-responsive font-weight-bold text-light">The brain in media</h3>
+                        </a>
+                        <p>User1</p>
+                      </div>
+                    </div>
+                    <div class="carousel-item">
+                      <div class="view">
+                        <img class="d-block w-100 rounded" src="http://127.0.0.1:8000/media/img_31.jpg"
+                          alt="First slide">
+                        <div class="mask rgba-black-light"></div>
+                      </div>
+
+                      <div class="carousel-caption">
+                        <a href="{% url 'post_view' 7 %}">
+                          <h3 class="h3-responsive font-weight-bold text-light">Freedom</h3>
+                        </a>
+                        <p>User2</p>
+                      </div>
+                    </div>
+                    <div class="carousel-item">
+                      <div class="view">
+                        <img class="d-block w-100 rounded" src="http://127.0.0.1:8000/media/img_28_1.jpg"
+                          alt="First slide">
+                        <div class="mask rgba-black-light"></div>
+                      </div>
+
+                      <div class="carousel-caption">
+                        <a href="{% url 'post_view' 4 %}">
+                          <h3 class="h3-responsive font-weight-bold text-light">Pablo Picasso</h3>
+                        </a>
+                        <p>User4</p>
+                      </div>
+                    </div>                    
+                  </div>
+
+                  
+                  <a class="carousel-control-prev" href="#carousel-example-2" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                  <a class="carousel-control-next" href="#carousel-example-2" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                  <!--/.Controls-->
+                </div>
+                <!--/.Carousel Wrapper-->
+                
+              </div>
+              <!-- Grid column -->
+
+            </div>
+          </section>
+
+
+            {% comment %} <!-- Popular posts -->
+          <section>
+
+            <!-- Grid row -->
+            <div class="row">
+
+              <!-- Grid column -->
+              <div class="col-md-10 col-lg-6 col-xl-12 mx-auto">
+
+                <!--Carousel Wrapper-->
+                <div id="carousel-example-2" class="carousel slide carousel-fade carousel-img" data-ride="carousel">
+                  <!--Indicators-->
+                  <ol class="carousel-indicators">
+                    <li data-target="#carousel-example-2" data-slide-to="0" class="active"></li>
+                    <li data-target="#carousel-example-2" data-slide-to="1"></li>
+                    <li data-target="#carousel-example-2" data-slide-to="2"></li>
+                  </ol>
+             
+                  <!--Slides-->
+                  <div class="carousel-inner" role="listbox">
+                    <div class="carousel-item active">
+                      <div class="view">
+                        <img class="d-block w-100 rounded" src="{{top_post.image.url}}"
+                          alt="First slide">
+                        <div class="mask rgba-black-light"></div>
+                      </div>
+                      <div class="carousel-caption">
+                        <h3 class="h3-responsive font-weight-bold">Light mask</h3>
+                        <p>First text</p>
+                      </div>
+                    </div>
+                    <div class="carousel-item">
+                      <!--Mask color-->
+                      <div class="view">
+                        <img class="d-block w-100 rounded" src="https://mdbootstrap.com/img/Photos/Others/city3.jpg"
+                          alt="Second slide">
+                        <div class="mask rgba-black-light"></div>
+                      </div>
+                      <div class="carousel-caption">
+                        <h3 class="h3-responsive font-weight-bold">Strong mask</h3>
+                        <p>Secondary text</p>
+                      </div>
+                    </div>
+                    <div class="carousel-item">
+                      <!--Mask color-->
+                      <div class="view">
+                        <img class="d-block w-100 rounded" src="https://mdbootstrap.com/img/Photos/Others/city1.jpg"
+                          alt="Third slide">
+                        <div class="mask rgba-black-light"></div>
+                      </div>
+                      <div class="carousel-caption">
+                        <h3 class="h3-responsive font-weight-bold">Slight mask</h3>
+                        <p>Third text</p>
+                      </div>
+                    </div>
+                  </div>
+             
+
+             
+                  <a class="carousel-control-prev" href="#carousel-example-2" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                  <a class="carousel-control-next" href="#carousel-example-2" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                  <!--/.Controls-->
+                </div>
+                <!--/.Carousel Wrapper-->
+
+              </div>
+              <!-- Grid column -->
+
+            </div>
+            <!-- Grid row -->
+
+          </section>
+          <!-- Popular posts -->
+
+           {% endcomment %}
+
+          <!-- Section: Advertisment -->
+          <section class="section mt-5">
+
+            <h6 class="grey-text text-center mb-3"><strong>- Advertisment -</strong></h6>
+
+            <!--Jumbotron-->
+            <div class="jumbotron text-center">
+
+            Advertisment
+
+            </div>
+            <!--Jumbotron-->
+
+          </section>
+
+          <!-- Section: Featured posts -->
+          <section class="section widget-content mt-5">
+
+            <h4 class="font-weight-bold"><strong>FEATURED POSTS</strong></h4>
+            <hr class="red mb-4">
+
+            {% for post in featured_posts  %}
+            
+            <div class="card card-body pb-0">
+              <div class="single-post">
+                <div class="row">
+                  <div class="col-4">
+                    <div class="view overlay">
+                      <img src="{{post.image.url}}" height="6" class="img-fluid rounded-0"
+                        alt="sample image">
+                      <a href="{% url 'post_view' post.id %}">
+                        <div class="mask waves-light"></div>
+                      </a>
+                    </div>
+                  </div>
+
+                  <!-- Excerpt -->
+                  <div class="col-8">
+                    <h6 class="mt-0 mb-3"><strong>{{post.title}}</strong></h6>
+
+                    <div class="post-data">
+                      <p class="font-small grey-text mb-0"><i class="far fa-clock-o"></i> {{post.timestamp}}</p>
+                    </div>
+                  </div>
+                  <!--/ Excerpt -->
+                </div>
+                <!--/ First row -->
+              </div>
+
+            </div>
+            
+            {% endfor %}
+
+          </section>
+
+        </div>
+
+        
+      </div>
+    </div>
+  </main>
+{% endblock %}

@@ -1,0 +1,263 @@
+{% extends 'layout.html' %}
+
+{% block navbar %}
+      {% include "navbar_simple.html" %}
+{% endblock navbar %}
+
+{% block body %}
+    
+    <section>
+        <div class="">
+            <img src="{{post.image.url}}" style="height:100%; width: 100%">
+        </div>
+        </div>
+    </section>
+
+     <main>
+        <div class="container-fluid mb-5">
+            <div class="row" style="margin-top: -100px;">
+                <div class="col-md-12">
+                    <div class="card hoverable pb-5 mx-md-3">
+                        <div class="card-body">
+                            <div class="container">
+
+                                {% if post.poster == user %}
+
+                                    <a href="{% url 'post_edit' post.id %}" type="button" class="btn btn-fb btn-sm">
+                                        <i class="fa fa-pen mr-1"></i> Edit
+                                    </a>                               
+                                {% endif %}
+
+                            
+                                <h1 class="text-center h1 pt-4 mb-3">
+                                    <strong>{{ post.title }}</strong>
+                                </h1>
+
+                                <div class="row">
+                                    <div class="col-md-12 col-xl-12 d-flex justify-content-center">
+                                        <p class="font-small dark-grey-text"><strong>{{ post.subject }}</strong></p>
+                                        <p class="dark-grey-text  ml-3"><em>{{ post.sub_subject }}</em></p>
+                                    </div>
+                                    <div class="col-md-12 col-xl-12 d-flex justify-content-center mt-2">
+                                        <p class="dark-grey-text article"> <em>{{ post.description }}</em></p>
+
+                                    </div>
+                                </div>
+
+                                <hr>
+                                
+                                <!--Grid row-->
+                                <div class="row pt-5">
+                                    <div class="col-md-12 col-xl-12">
+                                        <div class="row mt-3">
+                                            <p class="dark-grey-text article">{{ post.content | safe }}</p>
+                                        </div>
+
+                                        <div class="row mt-5">
+                                            <div class="col-md-12 col-xl-12 d-flex justify-content-center">
+                                                <a href="{% url 'profile' post.poster %}">
+                                                    <p class="font-small mb-1">
+                                                        <strong>Author:</strong> {{post.poster}}</p>
+                                                </a>
+                                                <p class="font-small grey-text mb-0 ml-3">
+                                                    <i class="far fa-clock-o dark-grey-text"></i> {{post.timestamp}}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <hr>
+
+                                        {% if user.is_authenticated %}
+                                            <div class="row mb-4">
+                                                <div class="col-md-12 text-center">
+
+                                                    <h4 class="text-center font-weight-bold dark-grey-text mt-3 mb-3">
+                                                        <strong>Like this post: </strong>
+                                                    </h4>
+
+                                                    {% if post.poster != user %}
+                                                        <button type="button" class="btn btn-fb btn-sm" id="like_button">
+                                                            <i class="fa fa-heart left"></i> <span>{{post.likes}}</span> 
+                                                        </button>
+                                                    {% endif %}
+
+                                                    <button type="button" class="btn btn-fb btn-sm"  id="comment_button">
+                                                        <i class="fa fa-comment left"></i> {{post.comments.count}}
+                                                    </button>
+
+                                                    <a class="btn btn-fb btn-sm" href="{% url 'save_post' post.id %}">
+                                                        <i class="fa fa-bookmark"></i> {{save_unsave}}
+                                                    </a>
+
+                                                </div>
+                                            </div>
+                                        {% endif %}
+
+
+                                        <hr>
+
+                                        <!--Comments-->
+                                        <section class="comment_section">
+
+                                            <!--Main wrapper-->
+                                            <div class="comments-list text-center text-md-left">
+                                                <div class="text-center my-5">
+                                                    <h3 class="font-weight-bold">Comments</h3>
+                                                </div>
+
+
+                                                {% for comment in comments  %}
+                                                    <!--First row-->
+                                                    <div class="row mb-5">
+                                                        <!--Image column-->
+                                                        <div class="col-sm-2 col-12 mb-3">
+                                                            <img src="{{comment.owner.avatar}}" height="100px" class="avatar rounded-circle z-depth-1-half" alt="{{comment.owner}}">
+                                                        </div>
+                                                        <!--/.Image column-->
+
+                                                        <!--Content column-->
+                                                        <div class="col-sm-10 col-12">
+                                                            <a>
+                                                                <h5 class="user-name font-weight-bold">{{comment.owner}}</h5>
+                                                            </a>
+                                                            <div class="card-data">
+                                                                <ul class="list-unstyled">
+                                                                    <li class="comment-date font-small"></li>
+                                                                </ul>
+                                                            </div>
+                                                            <p class="dark-grey-text article">{{comment.content}}</p>
+                                                        </div>
+                                                        <!--/.Content column-->
+                                                    </div>
+                                                    <!--/.First row-->
+                                                                                     
+                                                {%empty%}
+                                                No comments
+                                                {% endfor %}
+                                            </div>
+                                            <!--/.Main wrapper-->
+
+                                            <section class="mb-4 mt-4">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+
+                                                        <div class="reply-form">
+                                                            <h3 class="text-center h3 pt-5">Leave a comment </h3>
+                                                            {% if not user.is_authenticated %}
+                                                                <p class="text-center">(Not Logged In User)</p>
+
+
+                                                            <h5 class="font-weight-bold d-flex align-items-center justify-content-center">Sign up <a href="{% url 'login' %}">here</a></h5>
+                                                            {% else %}
+
+                                                            <form action="{% url 'post_view' post.id %}" method="POST">
+                                                                {% csrf_token %}
+
+                                                                
+                                                                <div class="md-form">
+                                                                    <i class="fas fa-pencil-alt prefix grey-text"></i>
+                                                                    <textarea type="text" id="replyForm-mess" name="replyForm-mess" class="md-textarea form-control" rows="3" required></textarea>
+                                                                    <label for="replyForm-mess">Your message</label>
+                                                                </div>
+
+                                                                <div class="text-center mt-4">
+                                                                    <button class="btn btn-indigo btn-rounded">Submit</button>
+                                                                </div>
+
+                                                                
+                                                                {% comment %} <form action="{% url 'post_view' post.id %}" method="POST">
+                                                                    {% csrf_token %}
+                                                                    {{placeComment}}
+                                                                    <input type="submit" value='Submit'>
+                                                                </form> {% endcomment %}
+
+                                                            </form>
+                                                            {% endif %}
+                                                        </div>
+                                                        <!--/.Leave a reply form-->
+
+                                                    </div>
+                                                    <!--Grid column-->
+
+                                                </div>
+                                                <!--Grid row-->
+
+                                            </section>
+                                            <!--/Section: Leave a reply (Not Logged In User)-->
+
+                                        </section>
+
+
+                                    </div>
+                                </div>
+
+        
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+  
+    document.querySelector('.comment_section').style.display = 'none' ;
+
+  // Use buttons to toggle between views
+  document.querySelector('#comment_button').addEventListener('click', () => {
+      if(document.querySelector('.comment_section').style.display === 'none'){
+          document.querySelector('.comment_section').style.display = 'block';
+      } else {
+          document.querySelector('.comment_section').style.display = 'none';
+      }
+  });
+
+  const like_btn = document.querySelector('#like_button');
+
+  like_btn.addEventListener('click', () => {
+
+    const parent = like_btn.parentElement
+    //const id = parent.querySelector('#post-id').innerText;
+
+    const l = parent.querySelector('span').innerText 
+    const likes = parseInt(l)
+
+//fix this class stuff
+    if(like_btn.className === 'btn btn-fb btn-sm waves-effect waves-light'){
+        like_btn.className = "btn btn-fb btn-sm text-light bg-danger"
+        //like(id, likes - 1)
+        parent.querySelector('span').innerText = likes + 1
+    } else if(like_btn.className === 'btn btn-fb btn-sm text-light bg-danger') {
+        like_btn.className = 'btn btn-fb btn-sm'
+        //like(id, likes + 1)
+        parent.querySelector('span').innerText = likes - 1
+    } else if(like_btn.className === 'btn btn-fb btn-sm') {
+        like_btn.className = 'btn btn-fb btn-sm text-light bg-danger'
+        //like(id, likes + 1)
+        parent.querySelector('span').innerText = likes + 1
+    }
+  })
+});
+
+
+
+function like(id, value){
+    return fetch(`/api/posts/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+            likes: value
+        })
+    })
+}
+
+
+
+</script>
+{% endblock extra_scripts %}
